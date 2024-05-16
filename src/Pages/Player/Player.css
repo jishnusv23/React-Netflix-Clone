@@ -1,0 +1,43 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Full viewport height */
+  position: relative; /* To position the img correctly */
+}
+
+.player img {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 50px;
+  cursor: pointer;
+}
+
+.responsive-iframe {
+  width: 90%;
+  height: 90vh; /* vh: viewport height */
+  border: none;
+}
+
+@media (max-width: 600px) {
+  .responsive-iframe {
+    width: 100%;
+    height: 50vh; /* Adjust height for smaller screens */
+  }
+}
+
+.player-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 90%;
+  margin-top: 10px; /* Add margin to separate from iframe */
+}
