@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 const useVideoData = (movieId) => {
+  console.log(movieId, "hooks");
   const [apiData, setApiData] = useState({
     name: "",
     key: "",
@@ -18,21 +20,30 @@ const useVideoData = (movieId) => {
   };
 
   useEffect(() => {
-    fetch(
-      `https://api.themoviedb.org/3/movie/${movieId}/videos?language=en-US`,
-      options
-    )
-      .then((response) => response.json())
-      .then((response) =>
-        setApiData({
-          name: response.results[0].name,
-          key: response.results[0].key,
-          published_at: response.results[0].published_at,
-          typeof: response.results[0].type,
-        })
+    console.log("dfakdfdsk");
+    axios
+      .get(
+        `https://api.themoviedb.org/3/movie/${movieId}/videos?language=en-US`,
+        options
       )
+      .then((response) => {
+        const result = response.data.results[0];
+        console.log(result, "djdjjjjjjjjjjjjjj");
+        if (result) {
+          console.log("ghhggggggggggggggggggggggggggggggggg");
+          setApiData({
+            name: result.name,
+            key: result.key,
+            published_at: result.published_at,
+            typeof: result.type,
+          });
+        } else {
+          console.error("No video results found");
+        }
+      })
       .catch((err) => console.error(err));
-  }, [movieId, options]);
+  }, []);
+  console.log(apiData, "apidata");
 
   return { apiData };
 };

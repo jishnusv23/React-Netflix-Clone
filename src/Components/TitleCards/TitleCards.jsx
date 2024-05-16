@@ -1,7 +1,7 @@
-import React, { useRef, useEffect, useState } from "react";
-import "./TitleCards.css";
-import Cards_data from "../../assets/cards/Cards_data";
+import React, { useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
 import useMovieData from "../../hooks/useMovieData";
+import "./TitleCards.css";
 
 const TitleCards = ({ title, catagory }) => {
   const appiData = useMovieData(catagory);
@@ -11,11 +11,11 @@ const TitleCards = ({ title, catagory }) => {
     event.preventDefault();
     cardRef.current.scrollLeft += event.deltaY;
   };
-  console.log(catagory);
+
   useEffect(() => {
     cardRef.current.addEventListener("wheel", handleWheel);
     return () => {
-      cardRef.current.removeEventListener("wheel", handleWheel);
+      cardRef.current?.removeEventListener("wheel", handleWheel);
     };
   }, []);
 
@@ -23,17 +23,15 @@ const TitleCards = ({ title, catagory }) => {
     <div className="title-cards">
       <h2>{title ? title : "Popular on Netflix"}</h2>
       <div className="card-list" ref={cardRef}>
-        {appiData.map((card, index) => {
-          return (
-            <div className="card" key={index}>
-              <img
-                src={`https://image.tmdb.org/t/p/w500` + card.backdrop_path}
-                alt="movie image"
-              />
-              <p>{card.original_title}</p>
-            </div>
-          );
-        })}
+        {appiData.map((card, index) => (
+          <Link to={`/player/${card.id}`} className="card" key={index}>
+            <img
+              src={`https://image.tmdb.org/t/p/w500${card.backdrop_path}`}
+              alt="movie image"
+            />
+            <p>{card.original_title}</p>
+          </Link>
+        ))}
       </div>
     </div>
   );
