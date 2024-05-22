@@ -4,53 +4,63 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   signOut,
+  signInWithPopup,
+  GoogleAuthProvider,
 } from "firebase/auth";
-import { addDoc, collection, getFirestore } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getFirestore,
+  doc,
+  setDoc,
+} from "firebase/firestore";
 import { toast } from "react-toastify";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAj3w8mrgleYmLO99WF3Dsids8gDvqbdfg",
-  authDomain: "netflix-clone-65716.firebaseapp.com",
-  projectId: "netflix-clone-65716",
-  storageBucket: "netflix-clone-65716.appspot.com",
-  messagingSenderId: "233588023321",
-  appId: "1:233588023321:web:53d627a1f66b0341f3ca88",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
-//* signup functions
+const googleAuthProvider = new GoogleAuthProvider();
 
 const signup = async (name, email, password) => {
   try {
     const res = await createUserWithEmailAndPassword(auth, email, password);
     const user = res.user;
-    await addDoc(collection(db, "user"), {
-      uid: user.id,
+    await addDoc(collection(db, "users"), {
+      uid: user.uid,
       name,
       authProvider: "local",
       email,
     });
+   
   } catch (error) {
-    console.log(error);
+    console.error(error);
     toast.error(error.code.split("/")[1].split("-").join(" "));
   }
 };
 
 const login = async (email, password) => {
+  console.log("Logging in...")
   try {
-    await signInWithEmailAndPassword(auth, email, password);
+    await signInWithEmailAndPassword(auth, email, password)
+    toast.success("User signed in successfully");
   } catch (error) {
-    console.log(error);
-    toast.error(error.code.split('/')[1].split('-').join(" "));
+    console.error(error)
+    toast.error(error.code.split("/")[1].split("-").join(" "))
   }
-};
+}
 
 const logout = () => {
   signOut(auth);
+  toast.success("User signed out successfully");
 };
 
-//*export
-export { db, auth, signup, login, logout };
+export { db, auth, signup, login, logout, googleAuthProvider };

@@ -12,9 +12,9 @@ const NavBar = () => {
   useEffect(() => {
     window.addEventListener("scroll", () => {
       if (window.scrollY >= 80) {
-        NavRef.current.classList.add("nav-dark");
+        NavRef.current?.classList?.add("nav-dark");
       } else {
-        NavRef.current.classList.remove("nav-dark");
+        NavRef.current?.classList?.remove("nav-dark");
       }
     });
   });
@@ -39,7 +39,7 @@ const NavBar = () => {
           <img src={profile_icon} alt="" className="profile" />
           <img src={caret_icon} alt="" />
           <div className="dropdown">
-            <p onClick={()=>logout()}>Sign Out of Netflix</p>
+            <p onClick={() => logout()}>Sign Out of Netflix</p>
           </div>
         </div>
       </div>
